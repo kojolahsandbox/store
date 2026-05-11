@@ -168,7 +168,6 @@
 
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-200 pt-16 pb-8">
-        <!-- ... (Footer Sama) ... -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
                 <div class="col-span-1 md:col-span-2">
@@ -325,23 +324,30 @@
             <!-- Content Area -->
             <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col overflow-y-auto">
                 <div class="text-xs text-primary font-medium px-2 py-1 bg-primary/10 rounded-md inline-block w-max mb-3" id="detailCategory">Kategori</div>
-                <h2 id="detailName" class="text-2xl font-bold text-gray-800 mb-2">Nama Produk</h2>
+                <h2 id="detailName" class="text-2xl font-bold text-gray-800 mb-1">Nama Produk</h2>
                 
-                <div class="flex items-center gap-2 mb-4 text-sm">
+                <div class="flex items-center gap-3 mb-4 text-sm">
                     <div class="flex text-yellow-400"><i class="fas fa-star"></i></div>
-                    <span id="detailRating" class="font-medium text-gray-600">4.5 | Terjual 100+</span>
+                    <span id="detailRating" class="font-medium text-gray-600 border-r pr-3 border-gray-300">4.5 | Terjual 100+</span>
+                    <span class="text-gray-500">Stok: <strong id="detailStock" class="text-gray-800">0</strong></span>
                 </div>
                 
-                <div class="mb-6 flex flex-col">
+                <div class="mb-5 flex flex-col">
                     <span id="detailOriginalPrice" class="text-sm text-gray-400 line-through hidden">Rp 0</span>
                     <span id="detailPrice" class="text-3xl font-bold text-primary">Rp 0</span>
                 </div>
                 
-                <!-- Varian Produk -->
-                <div id="variantSection" class="mb-6 hidden border-t border-b border-gray-100 py-4">
-                    <h4 class="font-bold text-gray-800 mb-3 text-sm">Pilih Varian:</h4>
-                    <div id="detailVariants" class="flex flex-wrap gap-2">
-                        <!-- Variant buttons injected by JS -->
+                <!-- Opsi Varian (Ukuran & Warna) -->
+                <div id="variantSection" class="mb-5 hidden border-t border-b border-gray-100 py-4 space-y-4">
+                    <!-- Ukuran -->
+                    <div id="sizeSection" class="hidden">
+                        <h4 class="font-bold text-gray-800 mb-2 text-sm">Pilih Ukuran:</h4>
+                        <div id="detailSizes" class="flex flex-wrap gap-2"></div>
+                    </div>
+                    <!-- Warna -->
+                    <div id="colorSection" class="hidden">
+                        <h4 class="font-bold text-gray-800 mb-2 text-sm">Pilih Warna:</h4>
+                        <div id="detailColors" class="flex flex-wrap gap-2"></div>
                     </div>
                 </div>
                 
@@ -350,8 +356,8 @@
                     <p id="detailDescription" class="text-gray-600 text-sm leading-relaxed whitespace-pre-line"></p>
                 </div>
                 
-                <button id="detailAddToCartBtn" class="w-full bg-primary hover:bg-indigo-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-indigo-500/30 transition-all duration-300 flex items-center justify-center gap-2 mt-auto">
-                    <i class="fas fa-cart-plus"></i> Tambah ke Keranjang
+                <button id="detailAddToCartBtn" class="w-full text-white font-bold py-3.5 px-4 rounded-xl shadow-lg transition-all duration-300 flex items-center justify-center gap-2 mt-auto">
+                    <!-- Akan diisi oleh JS -->
                 </button>
             </div>
         </div>
@@ -385,7 +391,7 @@
 
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-full shadow-xl z-50 flex items-center gap-3 transition-all duration-300 translate-y-20 opacity-0 pointer-events-none">
-        <i class="fas fa-check-circle text-green-400"></i>
+        <i class="fas fa-info-circle text-blue-400"></i>
         <span id="toastMessage" class="text-sm font-medium">Berhasil ditambahkan</span>
     </div>
 
@@ -396,6 +402,7 @@
         
         const categories = ["Semua", "Pakaian Pria", "Pakaian Wanita", "Elektronik", "Sepatu", "Aksesoris"];
         
+        // Produk diperbarui dengan sizes, colors, dan stock
         const products = [
             {
                 id: 1,
@@ -406,7 +413,9 @@
                 category: "Pakaian Pria",
                 rating: 4.8,
                 sold: 340,
-                variants: ["M", "L", "XL", "XXL"],
+                sizes: ["M", "L", "XL", "XXL"],
+                colors: ["Merah", "Biru Navy"],
+                stock: 45,
                 description: "Kemeja flanel lengan panjang berbahan katun impor yang super lembut, tidak gerah, dan menyerap keringat. Potongan slim-fit membuat tampilan Anda makin stylish baik untuk nongkrong maupun semi-formal."
             },
             {
@@ -418,7 +427,9 @@
                 category: "Pakaian Wanita",
                 rating: 4.9,
                 sold: 125,
-                variants: ["S", "M", "L"],
+                sizes: ["S", "M", "L"],
+                colors: ["Kuning", "Hijau Muda"],
+                stock: 10,
                 description: "Dress dengan motif floral cantik yang cocok dikenakan saat liburan ke pantai atau jalan-jalan santai. Terbuat dari material rayon viskosa yang jatuh dan sejuk di kulit."
             },
             {
@@ -430,7 +441,9 @@
                 category: "Elektronik",
                 rating: 4.7,
                 sold: 890,
-                variants: ["Hitam", "Silver", "Rose Gold"],
+                sizes: [], // Tanpa Ukuran
+                colors: ["Hitam", "Silver", "Rose Gold"],
+                stock: 0, // Simulasi Habis
                 description: "Jam tangan pintar dengan layar AMOLED, pemantau detak jantung, SpO2, dan berbagai mode olahraga. Tahan air hingga 5ATM. Baterai tahan hingga 14 hari."
             },
             {
@@ -442,7 +455,9 @@
                 category: "Sepatu",
                 rating: 4.6,
                 sold: 56,
-                variants: ["39", "40", "41", "42", "43"],
+                sizes: ["39", "40", "41", "42", "43"],
+                colors: ["Putih Polos"],
+                stock: 22,
                 description: "Sepatu sneakers putih bersih dengan desain minimalis. Sol karet yang empuk memastikan kenyamanan saat digunakan berjalan jauh. Cocok dipadukan dengan berbagai outfit."
             },
             {
@@ -454,7 +469,9 @@
                 category: "Aksesoris",
                 rating: 4.5,
                 sold: 430,
-                variants: ["Frame Hitam", "Frame Coklat"],
+                sizes: [],
+                colors: ["Frame Hitam", "Frame Coklat"],
+                stock: 100,
                 description: "Kacamata hitam dengan lensa polarized yang ampuh mengurangi silau matahari dan melindungi mata dari sinar UV400. Frame ringan dan tahan banting."
             },
             {
@@ -466,7 +483,9 @@
                 category: "Pakaian Pria",
                 rating: 4.8,
                 sold: 210,
-                variants: ["L", "XL"],
+                sizes: ["L", "XL"],
+                colors: ["Biru Muda", "Biru Tua"],
+                stock: 5,
                 description: "Jaket jeans pria dengan gaya washing vintage. Bahan denim tebal namun tetap fleksibel. Dilengkapi dengan 4 saku fungsional untuk kemudahan sehari-hari."
             },
             {
@@ -478,7 +497,9 @@
                 category: "Aksesoris",
                 rating: 4.7,
                 sold: 115,
-                variants: [], // Produk tanpa varian
+                sizes: [],
+                colors: ["Coklat", "Hitam"],
+                stock: 18,
                 description: "Sling bag elegan bermaterialkan kulit sapi asli yang awet. Punya kompartemen yang cukup untuk menaruh dompet, HP, dan barang-barang kecil lainnya."
             },
             {
@@ -490,7 +511,9 @@
                 category: "Elektronik",
                 rating: 4.9,
                 sold: 1200,
-                variants: ["Putih", "Hitam"],
+                sizes: [],
+                colors: ["Putih", "Hitam"],
+                stock: 50,
                 description: "Earbuds True Wireless Stereo (TWS) dengan kualitas suara bass yang mendalam dan latensi rendah. Sangat pas dipakai untuk mendengarkan musik atau bermain game."
             },
             {
@@ -502,7 +525,9 @@
                 category: "Sepatu",
                 rating: 4.8,
                 sold: 80,
-                variants: ["40", "41", "42", "43", "44"],
+                sizes: ["40", "41", "42", "43", "44"],
+                colors: ["Merah/Hitam", "Biru Neon"],
+                stock: 2, // Stok Terbatas
                 description: "Sepatu lari berteknologi tinggi dengan bantalan ultra responsif yang memantulkan kembali energi pijakan Anda. Bobot sangat ringan untuk memecahkan rekor waktu Anda."
             },
             {
@@ -514,7 +539,9 @@
                 category: "Pakaian Wanita",
                 rating: 4.6,
                 sold: 290,
-                variants: ["Merah Muda", "Biru Langit", "Putih"],
+                sizes: ["M", "L"],
+                colors: ["Merah Muda", "Biru Langit", "Putih"],
+                stock: 35,
                 description: "Blouse kerja atau kasual dengan kerah yang manis. Lengan dibuat bervolume untuk kesan elegan. Cocok dipasangkan dengan rok pensil maupun celana kulot."
             }
         ];
@@ -523,7 +550,10 @@
         let cart = [];
         let activeCategory = "Semua";
         let searchQuery = "";
-        let selectedVariantTemp = null; 
+        
+        let selectedSizeTemp = null; 
+        let selectedColorTemp = null; 
+        
         let shippingCost = 0;           
         let selectedProvinceName = "";  
         let selectedCityName = "";      
@@ -581,19 +611,37 @@
                     `;
                 }
 
-                const hasVariants = p.variants && p.variants.length > 0;
-                const quickAddAction = hasVariants ? `openProductDetail(${p.id})` : `addToCart(${p.id}, null)`;
-                const quickAddIcon = hasVariants ? `<i class="fas fa-list-ul"></i> Pilih Varian` : `<i class="fas fa-cart-plus"></i> Tambah`;
+                const isOutOfStock = p.stock <= 0;
+                if (isOutOfStock) {
+                    // Badge khusus jika habis
+                    discountBadge += `<div class="absolute top-3 right-3 bg-gray-800 text-white text-xs font-bold px-2 py-1 rounded-md shadow-sm">HABIS</div>`;
+                }
+
+                const hasVariants = (p.sizes && p.sizes.length > 0) || (p.colors && p.colors.length > 0);
+                
+                let actionButtonHtml = '';
+                if (isOutOfStock) {
+                    actionButtonHtml = `
+                        <button disabled class="w-full bg-gray-200/95 backdrop-blur-sm text-gray-500 font-bold py-2.5 rounded-xl shadow-sm cursor-not-allowed flex items-center justify-center gap-2">
+                            <i class="fas fa-times-circle"></i> Habis
+                        </button>`;
+                } else {
+                    const quickAddAction = hasVariants ? `openProductDetail(${p.id})` : `addToCart(${p.id}, null, null)`;
+                    const quickAddIcon = hasVariants ? `<i class="fas fa-list-ul"></i> Pilih Varian` : `<i class="fas fa-cart-plus"></i> Tambah`;
+                    
+                    actionButtonHtml = `
+                        <button onclick="event.stopPropagation(); ${quickAddAction}" class="w-full bg-white/95 backdrop-blur-sm text-primary font-bold py-2.5 rounded-xl shadow-lg hover:bg-primary hover:text-white transition-colors flex items-center justify-center gap-2">
+                            ${quickAddIcon}
+                        </button>`;
+                }
 
                 return `
-                <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group flex flex-col h-full">
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group flex flex-col h-full ${isOutOfStock ? 'opacity-75' : ''}">
                     <div class="relative overflow-hidden aspect-square cursor-pointer" onclick="openProductDetail(${p.id})">
-                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500 ${isOutOfStock ? 'grayscale-[30%]' : ''}">
                         ${discountBadge}
                         <div class="absolute inset-x-0 bottom-0 p-3 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                             <button onclick="event.stopPropagation(); ${quickAddAction}" class="w-full bg-white/95 backdrop-blur-sm text-primary font-bold py-2.5 rounded-xl shadow-lg hover:bg-primary hover:text-white transition-colors flex items-center justify-center gap-2">
-                                ${quickAddIcon}
-                             </button>
+                             ${actionButtonHtml}
                         </div>
                     </div>
                     <div class="p-4 flex flex-col flex-grow">
@@ -602,13 +650,10 @@
                         <div class="flex items-center gap-1 mb-3">
                             <i class="fas fa-star text-yellow-400 text-xs"></i>
                             <span class="text-xs font-medium text-gray-600">${p.rating}</span>
-                            <span class="text-xs text-gray-400 ml-1">| Terjual ${p.sold}+</span>
+                            <span class="text-xs text-gray-400 ml-1">| ${isOutOfStock ? '<span class="text-red-500 font-medium">Kosong</span>' : `Stok: ${p.stock}`}</span>
                         </div>
                         <div class="flex items-end justify-between mt-auto">
                             ${priceHtml}
-                            <button onclick="event.stopPropagation(); ${quickAddAction}" class="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors lg:hidden shrink-0 ml-2">
-                                <i class="fas ${hasVariants ? 'fa-list-ul text-sm' : 'fa-plus'}"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -669,14 +714,21 @@
             totalEl.textContent = formatCurrency(total); 
 
             // Render Produk di Keranjang
-            container.innerHTML = cart.map((item, index) => `
+            container.innerHTML = cart.map((item, index) => {
+                let variantHtml = [];
+                if(item.selectedSize) variantHtml.push(`Ukuran: <span class="font-medium text-gray-800">${item.selectedSize}</span>`);
+                if(item.selectedColor) variantHtml.push(`Warna: <span class="font-medium text-gray-800">${item.selectedColor}</span>`);
+                
+                const variantDisplay = variantHtml.length > 0 ? `<p class="text-[11px] text-gray-500 mt-1 bg-gray-100 px-2 py-1 rounded inline-block">${variantHtml.join(' | ')}</p>` : '';
+
+                return `
                 <div class="flex gap-4 bg-white p-4 rounded-2xl border border-gray-200 shadow-sm items-start">
                     <img src="${item.image}" alt="${item.name}" class="w-20 h-20 md:w-24 md:h-24 object-cover rounded-xl border border-gray-50 flex-shrink-0">
                     <div class="flex-1 flex flex-col min-h-[5rem] min-w-0"> 
                         <div class="flex justify-between items-start gap-3">
                             <div class="min-w-0 flex-1">
                                 <h4 class="text-sm font-semibold text-gray-800 line-clamp-2 leading-snug">${item.name}</h4>
-                                ${item.selectedVariant ? `<p class="text-xs text-gray-500 mt-1 bg-gray-100 px-2 py-0.5 rounded inline-block">Varian: <span class="font-medium">${item.selectedVariant}</span></p>` : ''}
+                                ${variantDisplay}
                                 <p class="text-primary font-bold text-sm mt-2">${formatCurrency(item.price)}</p>
                             </div>
                             <button onclick="removeFromCart(${index})" class="text-gray-300 hover:text-red-500 transition-colors p-1 flex-shrink-0" title="Hapus item">
@@ -692,7 +744,7 @@
                         </div>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
         }
 
         // --- 5. ACTIONS ---
@@ -711,22 +763,29 @@
             renderProducts();
         }
 
-        function addToCart(productId, variant = null) {
+        function addToCart(productId, size = null, color = null) {
             const product = products.find(p => p.id === productId);
             if (!product) return;
 
-            const existingItemIndex = cart.findIndex(item => item.id === productId && item.selectedVariant === variant);
+            // Hitung total kuantitas produk ini (apapun variannya) yang sudah ada di keranjang
+            const totalInCart = cart.filter(item => item.id === productId).reduce((sum, item) => sum + item.quantity, 0);
+            
+            if (totalInCart >= product.stock) {
+                showToast(`Stok tidak mencukupi. Sisa stok: ${product.stock}`);
+                return;
+            }
+
+            const existingItemIndex = cart.findIndex(item => item.id === productId && item.selectedSize === size && item.selectedColor === color);
             
             if (existingItemIndex > -1) {
                 cart[existingItemIndex].quantity += 1;
             } else {
-                cart.push({ ...product, quantity: 1, selectedVariant: variant });
+                cart.push({ ...product, quantity: 1, selectedSize: size, selectedColor: color });
             }
 
             renderCart();
             
-            const variantText = variant ? ` (${variant})` : '';
-            showToast(`${product.name}${variantText} ditambahkan!`);
+            showToast(`Berhasil ditambahkan ke keranjang!`);
             
             const badge = document.getElementById('cartBadge');
             badge.classList.remove('badge-pulse');
@@ -735,6 +794,18 @@
         }
 
         function updateQuantity(index, change) {
+            if (change > 0) {
+                const item = cart[index];
+                const product = products.find(p => p.id === item.id);
+                // Cek ketersediaan stok sebelum menambah
+                const totalInCart = cart.filter(i => i.id === item.id).reduce((sum, i) => sum + i.quantity, 0);
+                
+                if (totalInCart >= product.stock) {
+                    showToast(`Maksimal stok tercapai (${product.stock} pcs)`);
+                    return;
+                }
+            }
+
             cart[index].quantity += change;
             if (cart[index].quantity <= 0) {
                 removeFromCart(index);
@@ -796,7 +867,9 @@
             document.getElementById('detailImage').src = product.image;
             document.getElementById('detailCategory').textContent = product.category;
             document.getElementById('detailName').textContent = product.name;
-            document.getElementById('detailRating').textContent = `${product.rating} | Terjual ${product.sold}+`;
+            document.getElementById('detailStock').textContent = product.stock;
+            document.getElementById('detailStock').className = product.stock > 0 ? "text-green-600" : "text-red-500";
+            
             document.getElementById('detailPrice').textContent = formatCurrency(product.price);
             document.getElementById('detailDescription').textContent = product.description;
             
@@ -809,37 +882,74 @@
             }
 
             const variantSection = document.getElementById('variantSection');
-            const variantsContainer = document.getElementById('detailVariants');
+            const sizeSection = document.getElementById('sizeSection');
+            const colorSection = document.getElementById('colorSection');
             
-            if (product.variants && product.variants.length > 0) {
+            const hasSizes = product.sizes && product.sizes.length > 0;
+            const hasColors = product.colors && product.colors.length > 0;
+
+            if (hasSizes || hasColors) {
                 variantSection.classList.remove('hidden');
-                selectedVariantTemp = product.variants[0]; 
                 
-                const renderVariantButtons = () => {
-                    variantsContainer.innerHTML = product.variants.map(v => `
-                        <button onclick="selectVariant('${v}')" class="px-4 py-2 border rounded-lg text-sm font-medium transition-all duration-200 ${selectedVariantTemp === v ? 'border-primary bg-primary/10 text-primary shadow-sm' : 'border-gray-200 bg-white text-gray-600 hover:border-primary/50'}">
-                            ${v}
-                        </button>
-                    `).join('');
-                };
-                
-                window.selectVariant = (v) => {
-                    selectedVariantTemp = v;
-                    renderVariantButtons();
-                };
-                
-                renderVariantButtons();
+                // Urus Ukuran
+                if (hasSizes) {
+                    sizeSection.classList.remove('hidden');
+                    selectedSizeTemp = product.sizes[0]; 
+                    const renderSizes = () => {
+                        document.getElementById('detailSizes').innerHTML = product.sizes.map(s => `
+                            <button onclick="selectSize('${s}')" class="px-4 py-2 border rounded-lg text-sm font-medium transition-all duration-200 ${selectedSizeTemp === s ? 'border-primary bg-primary/10 text-primary shadow-sm' : 'border-gray-200 bg-white text-gray-600 hover:border-primary/50'}">
+                                ${s}
+                            </button>
+                        `).join('');
+                    };
+                    window.selectSize = (s) => { selectedSizeTemp = s; renderSizes(); };
+                    renderSizes();
+                } else {
+                    sizeSection.classList.add('hidden');
+                    selectedSizeTemp = null;
+                }
+
+                // Urus Warna
+                if (hasColors) {
+                    colorSection.classList.remove('hidden');
+                    selectedColorTemp = product.colors[0]; 
+                    const renderColors = () => {
+                        document.getElementById('detailColors').innerHTML = product.colors.map(c => `
+                            <button onclick="selectColor('${c}')" class="px-4 py-2 border rounded-lg text-sm font-medium transition-all duration-200 ${selectedColorTemp === c ? 'border-primary bg-primary/10 text-primary shadow-sm' : 'border-gray-200 bg-white text-gray-600 hover:border-primary/50'}">
+                                ${c}
+                            </button>
+                        `).join('');
+                    };
+                    window.selectColor = (c) => { selectedColorTemp = c; renderColors(); };
+                    renderColors();
+                } else {
+                    colorSection.classList.add('hidden');
+                    selectedColorTemp = null;
+                }
+
             } else {
                 variantSection.classList.add('hidden');
-                selectedVariantTemp = null;
+                selectedSizeTemp = null;
+                selectedColorTemp = null;
             }
 
+            // Tombol Add To Cart State
             const btn = document.getElementById('detailAddToCartBtn');
-            btn.onclick = () => {
-                addToCart(product.id, selectedVariantTemp);
-                closeProductDetail();
-                setTimeout(toggleCart, 300); 
-            };
+            if (product.stock <= 0) {
+                btn.disabled = true;
+                btn.className = "w-full bg-gray-300 text-gray-500 font-bold py-3.5 px-4 rounded-xl shadow-none cursor-not-allowed flex items-center justify-center gap-2 mt-auto";
+                btn.innerHTML = `<i class="fas fa-times-circle"></i> Stok Habis`;
+                btn.onclick = null;
+            } else {
+                btn.disabled = false;
+                btn.className = "w-full bg-primary hover:bg-indigo-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-indigo-500/30 transition-all duration-300 flex items-center justify-center gap-2 mt-auto";
+                btn.innerHTML = `<i class="fas fa-cart-plus"></i> Tambah ke Keranjang`;
+                btn.onclick = () => {
+                    addToCart(product.id, selectedSizeTemp, selectedColorTemp);
+                    closeProductDetail();
+                    setTimeout(toggleCart, 300); 
+                };
+            }
 
             const modal = document.getElementById('productDetailModal');
             modal.classList.remove('hidden');
@@ -943,7 +1053,7 @@
             const cityId = document.getElementById('citySelect').value;
 
             if (!name || !email || !wa || !address || !cityId) {
-                alert("Mohon lengkapi semua data (Nama, Email, No. WA, Alamat Detail, Provinsi, dan Kota).");
+                alert("Mohon lengkapi semua data pengiriman dengan benar.");
                 return;
             }
 
@@ -982,7 +1092,10 @@
                 const subtotalItem = item.price * item.quantity;
                 subtotal += subtotalItem;
                 
-                const variantText = item.selectedVariant ? ` [Varian: ${item.selectedVariant}]` : '';
+                let variantParts = [];
+                if (item.selectedSize) variantParts.push(`Ukuran: ${item.selectedSize}`);
+                if (item.selectedColor) variantParts.push(`Warna: ${item.selectedColor}`);
+                const variantText = variantParts.length > 0 ? `\n   > _${variantParts.join(' | ')}_` : '';
                 
                 text += `${index + 1}. *${item.name}*${variantText}\n`;
                 text += `   ${item.quantity}x @ ${formatCurrency(item.price)} = ${formatCurrency(subtotalItem)}\n`;
@@ -994,11 +1107,11 @@
             text += `*Ongkir (${selectedCityName}):* ${formatCurrency(shippingCost)}\n`;
             text += `*TOTAL DIBAYAR:* ${formatCurrency(finalTotal)}\n\n`;
             
-            text += `*Data Pelanggan & Pengiriman:*\n`;
+            text += `*Data Pengiriman:*\n`;
             text += `Nama: ${name}\n`;
             text += `Email: ${email}\n`;
             text += `No. WA: ${wa}\n`;
-            text += `Alamat Detail: ${address}\n`;
+            text += `Alamat: ${address}\n`;
             text += `Kota/Kabupaten: ${selectedCityName}\n`;
             text += `Provinsi: ${selectedProvinceName}\n\n`;
             text += `_Bukti transfer / screenshot pembayaran QRIS akan saya lampirkan setelah pesan ini._ Terima kasih!`;
@@ -1020,6 +1133,7 @@
             document.getElementById('citySelect').disabled = true;
             shippingCost = 0;
             renderCart();
+            renderProducts(); // Refresh status produk jika ada logic stok
         }
 
         // --- 10. EVENT LISTENERS ---
