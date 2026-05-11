@@ -346,7 +346,7 @@
     <!-- ================= MODAL CRUD PRODUK ================= -->
     <div id="productModal" class="fixed inset-0 z-50 hidden opacity-0 transition-opacity duration-300 flex items-center justify-center px-4">
         <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" onclick="closeModalProduct()"></div>
-        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col max-h-[90vh]">
             <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                 <h3 id="modalTitle" class="text-lg font-bold text-gray-800">Tambah Produk Baru</h3>
                 <button onclick="closeModalProduct()" class="text-gray-400 hover:text-red-500 w-8 h-8 rounded-full hover:bg-red-50 flex items-center justify-center"><i class="fas fa-times"></i></button>
@@ -367,6 +367,29 @@
                                 <!-- Option dirender oleh JS -->
                             </select>
                         </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Harga Jual (Rp) <span class="text-red-500">*</span></label>
+                            <input type="number" id="formPrice" required min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Harga Coret Asli (Opsional)</label>
+                            <input type="number" id="formOriginalPrice" min="0" placeholder="0 = Tanpa Diskon" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-primary">
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Stok Produk <span class="text-red-500">*</span></label>
+                            <input type="number" id="formStock" required min="0" placeholder="Jumlah stok tersedia" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Ukuran (Koma dipisah)</label>
+                            <input type="text" id="formSizes" placeholder="M, L, XL atau 39, 40" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Warna (Koma dipisah)</label>
+                            <input type="text" id="formColors" placeholder="Hitam, Putih, Merah" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-primary">
+                        </div>
                         <!-- Upload Gambar Area -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Foto Produk <span class="text-red-500">*</span></label>
@@ -380,21 +403,6 @@
                                 </div>
                             </div>
                             <input type="hidden" id="formImageBase64" required>
-                        </div>
-                    </div>
-
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Harga Jual (Rp) <span class="text-red-500">*</span></label>
-                            <input type="number" id="formPrice" required min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-primary">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Harga Coret Asli (Opsional)</label>
-                            <input type="number" id="formOriginalPrice" min="0" placeholder="0 = Tanpa Diskon" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-primary">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Varian (Koma dipisah)</label>
-                            <input type="text" id="formVariants" placeholder="M, L, XL atau Hitam, Putih" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-1 focus:ring-primary">
                         </div>
                     </div>
                 </div>
@@ -432,8 +440,28 @@
         let adminCategories = ["Pakaian Pria", "Pakaian Wanita", "Elektronik", "Sepatu", "Aksesoris"];
         
         let adminProducts = [
-            { id: 1, name: "Kemeja Flanel Premium", price: 145000, originalPrice: 250000, image: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=150&q=80", category: "Pakaian Pria", variants: ["M", "L", "XL"] },
-            { id: 2, name: "Smartwatch Active Pro", price: 450000, originalPrice: 799000, image: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=150&q=80", category: "Elektronik", variants: ["Hitam", "Silver"] }
+            { 
+                id: 1, 
+                name: "Kemeja Flanel Premium", 
+                price: 145000, 
+                originalPrice: 250000, 
+                image: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=150&q=80", 
+                category: "Pakaian Pria", 
+                sizes: ["M", "L", "XL"],
+                colors: ["Merah", "Biru Navy"],
+                stock: 45
+            },
+            { 
+                id: 2, 
+                name: "Smartwatch Active Pro", 
+                price: 450000, 
+                originalPrice: 799000, 
+                image: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=150&q=80", 
+                category: "Elektronik", 
+                sizes: [],
+                colors: ["Hitam", "Silver"],
+                stock: 12
+            }
         ];
 
         let adminCustomers = [
@@ -568,13 +596,20 @@
                 if(p.originalPrice > p.price) {
                     priceHtml = `<div class="flex flex-col"><span class="text-xs text-gray-400 line-through">${formatCurrency(p.originalPrice)}</span><span class="font-bold text-red-500">${formatCurrency(p.price)}</span></div>`;
                 }
+                
+                const stockColor = p.stock > 0 ? 'text-green-600' : 'text-red-600';
+                
                 return `
                 <tr class="hover:bg-gray-50/50">
                     <td class="px-6 py-4 flex gap-4 items-center">
                         <img src="${p.image}" class="w-12 h-12 rounded object-cover border border-gray-200">
                         <div>
                             <p class="font-semibold text-gray-800">${p.name}</p>
-                            <p class="text-xs text-gray-500">Varian: ${p.variants && p.variants.length ? p.variants.join(', ') : '-'}</p>
+                            <p class="text-xs text-gray-500 mt-1">
+                                Stok: <span class="font-bold ${stockColor}">${p.stock}</span> | 
+                                Ukuran: ${p.sizes && p.sizes.length ? p.sizes.join(', ') : '-'} | 
+                                Warna: ${p.colors && p.colors.length ? p.colors.join(', ') : '-'}
+                            </p>
                         </div>
                     </td>
                     <td class="px-6 py-4"><span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">${p.category}</span></td>
@@ -600,6 +635,7 @@
             if (mode === 'add') {
                 document.getElementById('modalTitle').textContent = 'Tambah Produk';
                 document.getElementById('formProductId').value = '';
+                document.getElementById('formStock').value = 0;
             } else {
                 document.getElementById('modalTitle').textContent = 'Edit Produk';
                 const p = adminProducts.find(item => item.id === id);
@@ -609,7 +645,9 @@
                     document.getElementById('formCategory').value = p.category;
                     document.getElementById('formPrice').value = p.price;
                     document.getElementById('formOriginalPrice').value = p.originalPrice || '';
-                    document.getElementById('formVariants').value = p.variants ? p.variants.join(', ') : '';
+                    document.getElementById('formStock').value = p.stock || 0;
+                    document.getElementById('formSizes').value = p.sizes ? p.sizes.join(', ') : '';
+                    document.getElementById('formColors').value = p.colors ? p.colors.join(', ') : '';
                     document.getElementById('formDescription').value = p.description || '';
                     
                     if(p.image) {
@@ -643,7 +681,9 @@
                 image: imageBase64,
                 price: parseInt(document.getElementById('formPrice').value),
                 originalPrice: parseInt(document.getElementById('formOriginalPrice').value) || 0,
-                variants: document.getElementById('formVariants').value.split(',').map(v=>v.trim()).filter(v=>v!==''),
+                stock: parseInt(document.getElementById('formStock').value) || 0,
+                sizes: document.getElementById('formSizes').value.split(',').map(v=>v.trim()).filter(v=>v!==''),
+                colors: document.getElementById('formColors').value.split(',').map(v=>v.trim()).filter(v=>v!==''),
                 description: document.getElementById('formDescription').value
             };
 
